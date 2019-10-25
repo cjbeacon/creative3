@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="c.css" />
+  <title>Shadow Dice</title>
+
+
+
+</head>
+
+
+
+<body>
+  <div id="shadow">
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a v-on:click="showNone()" class="navbar-brand" href="#">Shadow Dice</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a v-on:click="showStd()" class="nav-item nav-link" href="#">Standard Test</a>
+          <a v-on:click="showOpp()" class="nav-item nav-link" href="#">Opposed Test</a>
+          <a v-on:click="showExt()" class="nav-item nav-link" href="#">Extended Test</a>
+        </div>
+      </div>
+    </nav>
+    <!--Navbar-->
+
+    <div v-show="stdshow" class="card">
+
+      <h5 class="card-header d-flex">
+        <div class="flex-fill">Standard Test</div>
+        <button v-if="edgeActive" v-on:click="toggleEdge()" type="button" class="flex-fill btn btn-success">Edge</button>
+        <button v-else v-on:click="toggleEdge()" type="button" class="flex-fill btn btn-dark">Edge</button>
+      </h5>
+      <div class="card-body">
+        <form v-on:submit.prevent="rollStd">
+          <input type="number" v-model="diceIn">
+          <p class="card-text">Enter how many dice are being rolled</p>
+          <button type="submit">roll</button>
+          <div v-if="stdshowresults">
+            <p>Dice Results</p>
+            <p>Dice: {{stdLength}} Hits: {{stdhits}}</p>
+            <div class="d-flex">
+              <div class="flex-fill" v-for="die in currentResultsStd.dice" v-text="die.value"></div>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div v-show="oppshow" class="card-group">
+      <div class="card">
+        <h5 class="card-header d-flex">
+          <div class="flex-fill">Opposed Test 1</div>
+          <button v-if="edgeActive" v-on:click="toggleEdge()" type="button" class="flex-fill btn btn-success">Edge</button>
+          <button v-else v-on:click="toggleEdge()" type="button" class="flex-fill btn btn-dark">Edge</button>
+        </h5>
+        <div class="card-body">
+          <form v-on:submit.prevent="rollStd">
+            <input type="number" v-model="diceIn">
+            <p class="card-text">Enter how many dice are being rolled</p>
+            <button type="submit">roll</button>
+            <div v-if="stdshowresults">
+              <p>Dice Results</p>
+              <p>Dice: {{stdLength}} Hits: {{stdhits}}</p>
+              <div class="d-flex">
+                <div class="flex-fill" v-for="die in currentResultsStd.dice" v-text="die.value"></div>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <h5 class="card-header d-flex">
+          <div class="flex-fill">Opposed Test 2</div>
+          <button v-if="edgeActive2" v-on:click="toggleEdge2()" type="button" class="flex-fill btn btn-success">Edge</button>
+          <button v-else v-on:click="toggleEdge2()" type="button" class="flex-fill btn btn-dark">Edge</button>
+        </h5>
+        <div class="card-body">
+          <form v-on:submit.prevent="rollOpp2">
+            <input type="number" v-model="diceIn2">
+            <p class="card-text">Enter how many dice are being rolled</p>
+            <button type="submit">roll</button>
+            <div v-if="oppshowresults2">
+              <p>Dice Results</p>
+              <p>Dice: {{oppLength2}} Hits: {{opphits2s}}</p>
+              <div class="d-flex">
+                <div class="flex-fill" v-for="die in currentResultsOpp2.dice" v-text="die.value"></div>
+                </p>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <div v-show="extshow" class="card">
+      <h5 class="card-header d-flex">
+        <div class="flex-fill">Extended Test</div>
+      </h5>
+      <div class="card-body">
+        <form v-on:submit.prevent="rollExt">
+          <input type="number" v-model="diceInE">
+          <p class="card-text">Enter how many dice are being rolled</p>
+          <button type="submit">roll</button>
+          <div v-if="extshowresults">
+            <p>Dice Results</p>
+            <p>Dice: {{extLength}} Hits: {{exthits}} Total: {{extTotal}}   <button v-on:click="resetExt()" type="button" class="btn btn-dark">Reset Total</button></p>
+            <div class="d-flex">
+              <div class="flex-fill" v-for="die in currentResultsExt.dice" v-text="die.value"></div>
+              </p>
+            </div>
+        </form>
+
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <!--footer-->
+    <nav class="navbar fixed-bottom bg-dark justify-content-center">
+      <a class="navbar-brand " href="https://github.com/cjbeacon/creative3">Github</a>
+    </nav>
+    <!--footer-->
+
+
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-star-rating/dist/star-rating.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+  <script src="script.js"></script>
+
+</body>
+
+</html>
