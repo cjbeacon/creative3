@@ -4,18 +4,23 @@ var shadow = new Vue({
         currentResultsStd: {},
         currentResultsOpp2: {},
         currentResultsExt: {},
+        currentResults20: {},
         diceIn: 0,
         diceIn2: 0,
         diceInE: 0,
+        diceIn20: 0,
         diceQuantity: 0,
         diceQuantity2: 0,
         diceQuantityE: 0,
+        diceQuantity20: 0,
         stdshow: false,
         stdshowresults: false,
         oppshow: false,
         oppshowresults2: false,
         extshow: false,
         extshowresults: false,
+        dceshow: false,
+        dceshowresults: false,
         edgeActive: false,
         edgeActive2: false,
         test: "test",
@@ -23,10 +28,18 @@ var shadow = new Vue({
         newurl: "",
         newurl2: "",
         newurlE: "",
+        newurl20: "",
         extTotal: 0,
         calcExt: false,
     },
     computed: {
+        diceTotal(){
+            let total = 0;
+            for (let i = 0; i < this.currentResults20.dice.length; i++) {
+                total += this.currentResults20.dice[i].value;
+            }
+            return total;
+        },
         stdhits() {
             let j = 0;
             for (let i = 0; i < this.currentResultsStd.dice.length; i++) {
@@ -87,31 +100,47 @@ var shadow = new Vue({
             console.log(this.currentResultsExt);
             this.showExtResults();
         },
+        currentResults20: function (newR, oldR) {
+            console.log(this.currentResults20);
+            this.show20Results();
+        },
     },
     methods: {
         showNone() {
             this.oppshow = false;
             this.extshow = false;
             this.stdshow = false;
+            this.dceshow = false;
         },
         showStd() {
             this.oppshow = false;
             this.extshow = false;
+            this.dceshow = false;
             if (this.stdshow) { this.stdshow = false; }
             else { this.stdshow = true; }
         },
         showOpp() {
             this.extshow = false;
             this.stdshow = false;
+            this.dceshow = false;
             if (this.oppshow) { this.oppshow = false; }
             else { this.oppshow = true; }
         },
         showExt() {
             this.oppshow = false;
             this.stdshow = false;
+            this.dceshow = false;
             if (this.extshow) { this.extshow = false; }
             else { this.extshow = true; }
         },
+        showDce() {
+            this.oppshow = false;
+            this.stdshow = false;
+            this.extshow = false;
+            if (this.dceshow) { this.dceshow = false; }
+            else { this.dceshow = true; }
+        },
+        
         toggleEdge() {
             if (this.edgeActive) { this.edgeActive = false; }
             else { this.edgeActive = true; }
@@ -160,6 +189,20 @@ var shadow = new Vue({
                     this.calcExt = true;
                 })
         },
+        roll20() {
+            this.diceQuantity20 = this.diceIn20;
+            this.diceIn20 = 0;
+            this.newurl20 = this.url + this.diceQuantity20.toString() + "d20/";
+            fetch(this.newurl20)
+                .then((data) => {
+                    return (data.json());
+                })
+                .then((gotBack20) => {
+                    this.currentResults20 = [];
+                    this.currentResults20 = gotBack20;
+                })
+        },
+        
         showStdResults() {
             this.stdshowresults = true;
         },
@@ -168,6 +211,9 @@ var shadow = new Vue({
         },
         showExtResults() {
             this.extshowresults = true;
+        },
+        show20Results() {
+            this.dceshowresults = true;
         },
         resetExt() {
             this.calcExt = false;

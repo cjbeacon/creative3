@@ -25,6 +25,8 @@
           <a v-on:click="showStd()" class="nav-item nav-link" href="#">Standard Test</a>
           <a v-on:click="showOpp()" class="nav-item nav-link" href="#">Opposed Test</a>
           <a v-on:click="showExt()" class="nav-item nav-link" href="#">Extended Test</a>
+          <a v-on:click="showDce()" class="nav-item nav-link" href="#">Other Dice</a>
+
         </div>
       </div>
     </nav>
@@ -112,7 +114,7 @@
           <button type="submit">roll</button>
           <div v-if="extshowresults">
             <p>Dice Results</p>
-            <p>Dice: {{extLength}} Hits: {{exthits}} Total: {{extTotal}}   <button v-on:click="resetExt()" type="button" class="btn btn-dark">Reset Total</button></p>
+            <p>Dice: {{extLength}} Hits: {{exthits}} Total: {{extTotal}} <button v-on:click="resetExt()" type="button" class="btn btn-dark">Reset Total</button></p>
             <div class="d-flex">
               <div class="flex-fill" v-for="die in currentResultsExt.dice" v-text="die.value"></div>
               </p>
@@ -122,6 +124,30 @@
         </div>
       </div>
     </div>
+
+
+    <div v-show="dceshow" class="card">
+      <h5 class="card-header d-flex">
+        <div class="flex-fill">D20</div>
+      </h5>
+      <div class="card-body">
+        <form v-on:submit.prevent="roll20">
+          <input type="number" v-model="diceIn20">
+          <p class="card-text">Enter how many dice are being rolled</p>
+          <button type="submit">roll</button>
+          <div v-if="dceshowresults">
+            <p>Dice Results</p>
+            <div class="d-flex">
+              <div class="flex-fill" v-for="die in currentResults20.dice" v-text="die.value"></div>
+              </p>
+            </div>
+            <br>
+            <p>Total:  {{diceTotal}}</p>
+          </div>
+        </form>
+      </div>
+    </div>
+
 
     <br>
     <br>
