@@ -1,1 +1,1 @@
-# creative3
+# creative3: This is a project I wrote up with a friend in a couple evenings. The main portion of the website is a dice roller for a game system with somewhat complicated dice rolls. Though a little unnecessary it gets the specific die rolls from an api. 
